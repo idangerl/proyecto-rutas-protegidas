@@ -50,6 +50,35 @@ const getUserById = (req ,res) => {
         })
 }
 
+const getUserByEmail = (req ,res) => {
+    const email = req.params.email 
+    usersControllers.findUserByEmail(email)
+        .then(data => {
+            if(data){
+                responses.success({
+                    status: 200,
+                    data,
+                    message: `Getting User with email: ${email}`,
+                    res
+                })
+            } else {
+                responses.error({
+                    status: 404,
+                    message: `User with email: ${email}, not found`,
+                    res
+                })
+            }
+        })
+        .catch(err => {
+            responses.error({
+                status: 400,
+                data: err,
+                message: 'Something bad getting the user',
+                res
+            })
+        })
+}
+
 const postNewUser = (req, res) => {
     const userObj = req.body
     usersControllers.createNewUser(userObj)
@@ -162,5 +191,6 @@ module.exports = {
     getUserById,
     postNewUser,
     patchUser,
-    deleteUser
+    deleteUser,
+    getUserByEmail
 }
